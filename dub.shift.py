@@ -85,9 +85,9 @@ except:
 try:
 	buffer_old = buffer.copy()
 	buffer_string= ''.join(buffer)
-	buffer.clear()
 	inconsistent_use = re.findall(r"\](?!\s/)\s+", buffer_string, flags=re.MULTILINE)
 	if inconsistent_use:
+		buffer.clear()
 		for inconsistent_use in buffer_old:
 			fixed3 = re.sub(r"\](?!\s/)\s+", "]\t", inconsistent_use)
 			buffer.append(fixed3)
