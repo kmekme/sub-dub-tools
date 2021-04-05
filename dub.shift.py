@@ -83,14 +83,10 @@ except:
 
 #fix inconsistent use of tabs and spaces
 try:
-	buffer_old = buffer.copy()
-	buffer_string= ''.join(buffer)
-	inconsistent_use = re.findall(r"\](?!\s/)\s+", buffer_string, flags=re.MULTILINE)
-	if inconsistent_use:
-		buffer.clear()
-		for inconsistent_use in buffer_old:
-			fixed3 = re.sub(r"\](?!\s/)\s+", "]\t", inconsistent_use)
-			buffer.append(fixed3)
+	buffer_new = list()
+        for line in buffer:
+            buffer_new.append("\t".join(line.split(None, 1)))
+        # do something with buffer_new
 except:
 	sys.exit('Something broke when trying to fix inconsistent use of tabs and spaces.')
 
