@@ -85,7 +85,7 @@ try:
 	buffer_new = list()
 	for line in buffer:
 		if line.startswith('['):
-			line = line[:line.rindex(']')] + '\t'.join(line[line.rindex(']'):].split(None, 1))
+			line = line[:line.index(']')] + '\t'.join(line[line.index(']'):].split(None, 1))
 			buffer_new.append(line)
 		else: buffer_new.append(line)
 except:
