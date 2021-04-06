@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, sys, re, datetime, os
+import argparse, re, datetime, os
 from time import sleep
 
 #cli arguments
@@ -80,17 +80,14 @@ try:
 except:
 	sys.exit('Something broke during shifting.')
 
-
 #fix inconsistent use of tabs and spaces
 try:
-	buffer_old = buffer.copy()
-	buffer_string= ''.join(buffer)
-	inconsistent_use = re.findall(r"\](?!\s/)\s+", buffer_string, flags=re.MULTILINE)
-	if inconsistent_use:
-		buffer.clear()
-		for inconsistent_use in buffer_old:
-			fixed3 = re.sub(r"\](?!\s/)\s+", "]\t", inconsistent_use)
-			buffer.append(fixed3)
+	buffer_new = list()
+	for line in buffer:
+		if line.startswith('['):
+			line = line[:line.rindex(']')] + '\t'.join(line[line.rindex(']'):].split(None, 1))
+			buffer_new.append(line)
+		else: buffer_new.append(line)
 except:
 	sys.exit('Something broke when trying to fix inconsistent use of tabs and spaces.')
 
@@ -98,7 +95,8 @@ except:
 #dump buffer to a text file
 try:
 	with open('shifted.temp', 'w') as temp_file:
-		temp_file.writelines(buffer)
+		if buffer_new: temp_file.writelines(buffer_new)
+		else: temp_file.writelines(buffer)
 except PermissionError:
 	sys.exit("Can't create shifted.temp. Permission denied.")
 except:
