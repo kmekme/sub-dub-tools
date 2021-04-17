@@ -5,9 +5,11 @@ import argparse, sys, os
 #cli arguments
 parser=argparse.ArgumentParser()
 parser.add_argument('-i', '--input', metavar='FILENAME',
-	help='name of input file (REQUIRED)', required=True)
+	help='name of input file (REQUIRED)', required=False)
 parser.add_argument('--batikan', action='store_true', default=False,
         help='Toggle if Batikan prepared the subs.')
+parser.add_argument('-l', '--list', action='store_true', default=False,
+	help='Print the abbrevation list.')
 args = parser.parse_args()
 
 #list of items to replace
@@ -159,16 +161,22 @@ batikan = {'Ø':']',
 #list to write the output
 buffer = list()
 
+#print the abbrevation list
+if args.list:
+	for key in abbr_list:
+		print('{} --> {}'.format(key, abbr_list[key]))
+
 #open the input file and replace the items
 try:
-	with open(args.input, 'r') as script:
-		content = script.read()
-		for key in abbr_list:
-			content = content.replace(key, abbr_list[key])
-		if args.batikan:
-			for key in batikan:
-				content = content.replace(key, batikan[key])
-		buffer.append(content)
+	if args.input:
+		with open(args.input, 'r') as script:
+			content = script.read()
+			for key in abbr_list:
+				content = content.replace(key, abbr_list[key])
+			if args.batikan:
+				for key in batikan:
+					content = content.replace(key, batikan[key])
+			buffer.append(content)
 except FileNotFoundError:
 	sys.exit('Unable to open {}. Does the file exist?'.format(args.input))
 except PermissionError:
@@ -178,15 +186,17 @@ except:
 
 
 #change the input file's name
-old_name = os.getcwd() + '/' + args.input
-tokens = args.input.rsplit('.', 1)
-new_name = os.getcwd() + '/' + tokens[0] + '-old.' + tokens[1]
-os.rename(old_name, new_name)
+if args.input:
+	old_name = os.getcwd() + '/' + args.input
+	tokens = args.input.rsplit('.', 1)
+	new_name = os.getcwd() + '/' + tokens[0] + '-old.' + tokens[1]
+	os.rename(old_name, new_name)
 
 #dump the buffer into a file
 try:
-	with open(args.input, 'w') as output:
-		output.writelines(buffer)
-		print("Items have been replaced in {}.".format(args.input))
+	if args.input:
+		with open(args.input, 'w') as output:
+			output.writelines(buffer)
+			print("Items have been replaced in {}.".format(args.input))
 except:
 	sys.exit('Cannot write to {}.'.format(args.input))
