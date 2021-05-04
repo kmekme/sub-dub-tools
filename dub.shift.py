@@ -22,7 +22,7 @@ try:
 	tokens = args.input.rsplit('.', 1)
 	input_text = tokens[0] + '.txt'
 	file = os.getcwd() + '/' + input_text
-	os.popen('/usr/bin/unoconv -d document -f text {}'.format(args.input))
+	os.popen('/usr/bin/unoconv -d document -f text "{}"'.format(args.input))
 	while True:
 		sleep(0.1)
 		if os.path.isfile(file): break
@@ -82,21 +82,21 @@ except:
 
 #fix inconsistent use of tabs and spaces
 try:
-	buffer_new = list()
-	for line in buffer:
-		if line.startswith('['):
-			line = line[:line.index(']')] + '\t'.join(line[line.index(']'):].split(None, 1))
-			buffer_new.append(line)
-		else: buffer_new.append(line)
+	buffer_old = buffer.copy()
+	buffer_string= ''.join(buffer)
+	buffer.clear()
+	inconsistent_use = re.findall(r"\](?!\s/)\s+", buffer_string, flags=re.MULTILINE)
+	if inconsistent_use:
+		for inconsistent_use in buffer_old:
+			fixed3 = re.sub(r"\](?!\s/)\s+", "]\t", inconsistent_use)
+			buffer.append(fixed3)
 except:
 	sys.exit('Something broke when trying to fix inconsistent use of tabs and spaces.')
-
 
 #dump buffer to a text file
 try:
 	with open('shifted.temp', 'w') as temp_file:
-		if buffer_new: temp_file.writelines(buffer_new)
-		else: temp_file.writelines(buffer)
+		temp_file.writelines(buffer)
 except PermissionError:
 	sys.exit("Can't create shifted.temp. Permission denied.")
 except:
@@ -106,7 +106,7 @@ except:
 try:
 	output = tokens[0] + '-shifted.rtf'
 	output_file = os.getcwd() + '/' + output
-	os.popen('/usr/bin/unoconv -f rtf -o {} {}'.format(output, 'shifted.temp'))
+	os.popen('/usr/bin/unoconv -f rtf -o "{}" {}'.format(output, 'shifted.temp'))
 	while True:
 		sleep(0.1)
 		if os.path.isfile(output_file): break
