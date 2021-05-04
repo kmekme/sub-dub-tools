@@ -114,6 +114,15 @@ try:
 			if over_rs_limit:
 				print("Lines over reading speed limit :", over_rs_limit)
 
+		#check the gap between subtitles
+		def sub_gap():
+			return_list = list()
+			for x in subtitles:
+				prev_sub = x.index - 1
+				print(x.index)
+				print(prev_sub)
+			return return_list
+
 except FileNotFoundError:
         sys.exit('Unable to open {}. Does the file exist?'.format(args.input))
 except PermissionError:
