@@ -24,7 +24,6 @@ except:
 #dump the knp terms into a list
 try:
 	knp_terms = list()
-
 	with open(args.knp, 'r') as knp_list:
 		content = knp_list.readlines()
 		for line in content:
@@ -40,10 +39,8 @@ except:
 try:
 	with open("temp.csv", 'r') as pldl:
 		content = pldl.read()
-
 		#print the excel file's name
 		print("<br><b>" + args.input + "</b><br><br>")
-
 		for term in knp_terms:
 			term_new = term.strip('\n')
 			occurences = content.count(term_new)
