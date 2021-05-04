@@ -8,7 +8,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('-i', '--input', metavar='FILENAME',
         help='name of input file (REQUIRED)', required=True)
 parser.add_argument('-k', '--knp', metavar='FILENAME',
-	help='The list of knp terms (REQUIRED)', required=False)
+	help='The list of knp terms (REQUIRED)', required=True)
 args = parser.parse_args()
 
 #convert the input xlsx file to csv
