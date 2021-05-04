@@ -54,3 +54,13 @@ except PermissionError:
         sys.exit('Unable to open temp.csv. Check your file permissions.')
 except:
         sys.exit('Something broke trying to go through the csv file.')
+
+#delete temp.csv
+try:
+	os.remove("temp.csv")
+except FileNotFoundError:
+        sys.exit('Unable to open temp.csv. Does the file exist?')
+except PermissionError:
+        sys.exit('Unable to open temp.csv. Check your file permissions.')
+except:
+        sys.exit('Something broke trying to delete temp.csv')
