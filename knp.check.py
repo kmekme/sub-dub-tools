@@ -11,24 +11,46 @@ parser.add_argument('-k', '--knp', metavar='FILENAME',
 	help='The list of knp terms (REQUIRED)', required=False)
 args = parser.parse_args()
 
-#print the excel file's name
-print("<br><b>" + args.input + "</b><br><br>")
-
 #convert the input xlsx file to csv
-Xlsx2csv(args.input, outputencoding="utf-8").convert("temp.csv")
+try:
+	Xlsx2csv(args.input, outputencoding="utf-8").convert("temp.csv")
+except FileNotFoundError:
+        sys.exit('Unable to open {}. Does the file exist?'.format(args.input))
+except PermissionError:
+        sys.exit('Unable to open {}. Check your file permissions.'.format(args.input))
+except:
+        sys.exit('Something broke trying to convert the excel file into csv.')
 
 #dump the knp terms into a list
-knp_terms = list()
+try:
+	knp_terms = list()
 
-with open(args.knp, 'r') as knp_list:
-	content = knp_list.readlines()
-	for line in content:
-		knp_terms.append(line)
+	with open(args.knp, 'r') as knp_list:
+		content = knp_list.readlines()
+		for line in content:
+			knp_terms.append(line)
+except FileNotFoundError:
+        sys.exit('Unable to open {}. Does the file exist?'.format(args.knp))
+except PermissionError:
+        sys.exit('Unable to open {}. Check your file permissions.'.format(args.knp))
+except:
+        sys.exit('Something broke trying to write the knp terms into a list.')
 
 #open the dialogue list and check if there are any instances of the terms in the knp list
-with open("temp.csv", 'r') as pldl:
-	content = pldl.read()
-	for term in knp_terms:
-		term_new = term.strip('\n')
-		occurences = content.count(term_new)
-		if occurences > 0: print("{}: {}".format(term_new, occurences) + "<br>")
+try:
+	with open("temp.csv", 'r') as pldl:
+		content = pldl.read()
+
+		#print the excel file's name
+		print("<br><b>" + args.input + "</b><br><br>")
+
+		for term in knp_terms:
+			term_new = term.strip('\n')
+			occurences = content.count(term_new)
+			if occurences > 0: print("{}: {}".format(term_new, occurences) + "<br>")
+except FileNotFoundError:
+        sys.exit('Unable to open temp.csv. Does the file exist?')
+except PermissionError:
+        sys.exit('Unable to open temp.csv. Check your file permissions.')
+except:
+        sys.exit('Something broke trying to go through the csv file.')
