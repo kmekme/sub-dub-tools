@@ -3,6 +3,7 @@
 import argparse, re, os
 from time import sleep
 
+#cli arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', metavar='FILENAME',
         help='Name of input file (REQUIRED)', required=True)
