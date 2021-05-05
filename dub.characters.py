@@ -21,7 +21,6 @@ while True:
 #list the characters
 with open(file, 'r') as script:
 	content = script.read()
-
 	characters = re.findall(r'\[(.*?)\]', content)
 	printed = list()
 	for character in characters:
