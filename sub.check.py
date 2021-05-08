@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, sys, re, srt, datetime, math
+import argparse, re, srt, datetime, math
 
 #cli arguments
 parser=argparse.ArgumentParser()
@@ -115,13 +115,16 @@ try:
 				print("Lines over reading speed limit :", over_rs_limit)
 
 		#check the gap between subtitles
-		def sub_gap():
+		def chk_sub_gap():
 			return_list = list()
-			for x in subtitles:
-				prev_sub = x.index - 1
-				print(x.index)
-				print(prev_sub)
+			for x, y in zip(subtitles, subtitles[1:]):
+				gap_timedelta = y.start - x.end
+				gap = gap_timedelta.total_seconds() * 1000
+				if gap < 80: return_list.append('{} - {} gap: {}'.format(x.index, y.index, gap))
 			return return_list
+		sub_gap = chk_sub_gap()
+		if sub_gap:
+			print("Sub gap violation :", sub_gap)
 
 except FileNotFoundError:
         sys.exit('Unable to open {}. Does the file exist?'.format(args.input))
