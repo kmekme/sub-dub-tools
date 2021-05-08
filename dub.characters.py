@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, re, os
+import argparse, re, os, sys
 from time import sleep
 
 #cli arguments
