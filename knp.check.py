@@ -43,7 +43,7 @@ try:
 		print("<br><b>" + args.input + "</b><br><br>")
 		for term in knp_terms:
 			term_new = term.strip('\n')
-			occurences = content.count(term_new)
+			occurences = content.upper().count(term_new.upper())
 			if occurences > 0: print("{}: {}".format(term_new, occurences) + "<br>")
 except FileNotFoundError:
         sys.exit('Unable to open temp.csv. Does the file exist?')
