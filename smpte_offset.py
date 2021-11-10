@@ -14,7 +14,6 @@ args = parser.parse_args()
 add = True if args.forward is True else False
 
 def parse_timecodes(lines):
-
     start_list = list()
     end_list = list()
     for line in lines:
@@ -36,7 +35,6 @@ def offset_timecodes(timecodes, shift_amount):
     return shifted_tc
 
 def swap_timecodes(st_old_tc, st_new_tc, en_old_tc, en_new_tc, content):
-
     swap_index = {}
     for i, x, j, k in zip(st_old_tc, st_new_tc, en_old_tc, en_new_tc):
         swap_index[i] = x
