@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse, re
 from timecode import Timecode
 
@@ -28,7 +29,10 @@ def parse_timecodes(lines):
 def offset_timecodes(timecodes, shift_amount):
     shifted_tc = list()
     for timecode in timecodes:
-        tc_event = Timecode(args.fps, timecode)
+        if timecode == '01:00:00:00':
+            tc_event = Timecode(args.fps, '01:00:00:01')
+        else:
+            tc_event = Timecode(args.fps, timecode)
         offset = Timecode(args.fps, '00:00:00:00')
         new_tc = tc_event - shift_amount + offset
         shifted_tc.append(new_tc)
